@@ -32,7 +32,7 @@ public class AuthController {
     public ResponseEntity<Boolean> validate(
             @RequestParam("token") String token
     ) {
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(authService.validateToken(token));
     }
 

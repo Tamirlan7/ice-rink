@@ -41,7 +41,7 @@ public class AuthService {
         var user = userRepository.findByPhoneNumber(args.phoneNumber())
                 .orElseThrow(() -> new NotFoundException("Пользователь с таким номером телефона не найден, " + args.phoneNumber()));
 
-        if (!passwordEncoder.matches(user.getPassword(), args.password())) {
+        if (!passwordEncoder.matches(args.password(), user.getPassword())) {
             throw new BadRequestException("Неверный пароль");
         }
 
