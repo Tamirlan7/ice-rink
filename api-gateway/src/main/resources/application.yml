@@ -1,6 +1,7 @@
 server:
   port: 8080
 
+
 spring:
   application:
     name: api-gateway
@@ -23,3 +24,7 @@ spring:
 logging:
   level:
     root: DEBUG
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
