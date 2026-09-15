@@ -15,8 +15,10 @@ public class TicketController {
     private TicketService ticketService;
 
     @GetMapping("/test")
-    public String test() {
-        return "Hello user!";
+    public String test(
+            @RequestHeader("X-User-Id") String userId
+    ) {
+        return "Hello user with id " + userId + "!";
     }
 
     @PostMapping("/purchase")

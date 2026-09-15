@@ -1,6 +1,11 @@
 server:
   port: 8080
 
+jwt:
+  keys:
+    public:
+      path:
+        keys/public.pem
 
 spring:
   application:
@@ -28,6 +33,8 @@ spring:
               uri: lb://ticket-service
               predicates:
                 - Path=/api/v1/tickets/**
+              filters:
+                - AuthenticationFilter
 
 eureka:
   instance:

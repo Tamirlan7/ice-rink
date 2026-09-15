@@ -1,0 +1,15 @@
+meta {
+  name: test
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8080/api/v1/tickets/test
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{bearer_token}}
+}
