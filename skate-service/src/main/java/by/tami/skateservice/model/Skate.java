@@ -25,6 +25,7 @@ public class Skate {
     private Short size;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Sex sex;
 
     @Column(name = "is_available", nullable = false)
