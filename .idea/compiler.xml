@@ -10,15 +10,25 @@
         <module name="api-gateway" />
         <module name="eureka-server" />
       </profile>
-      <profile name="Annotation profile for ticket-service" enabled="true">
+      <profile name="Annotation profile for skate-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
         </processorPath>
-        <module name="ticket-service" />
+        <module name="skate-service" />
+      </profile>
+      <profile name="Annotation profile for user-service" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
+        </processorPath>
         <module name="user-service" />
+        <module name="ticket-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -30,6 +40,7 @@
       <module name="api-gateway" options="-parameters" />
       <module name="auth-service" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
+      <module name="skate-service" options="-parameters" />
       <module name="ticket-service" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>
