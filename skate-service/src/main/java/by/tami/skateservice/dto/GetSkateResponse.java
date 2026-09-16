@@ -1,6 +1,5 @@
-package by.tami.skateservice.service;
+package by.tami.skateservice.dto;
 
-import by.tami.skateservice.dto.SkateDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

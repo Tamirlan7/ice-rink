@@ -20,6 +20,11 @@ spring:
               enabled: true
 
           routes:
+            - id: skate-service-route
+              uri: lb://skate-service
+              predicates:
+                - Path=/api/v1/skates/**
+
             - id: auth-service-route
               uri: lb://user-service
               predicates:
@@ -35,7 +40,6 @@ spring:
                 - Path=/api/v1/tickets/**
               filters:
                 - AuthenticationFilter
-
 eureka:
   instance:
     prefer-ip-address: true

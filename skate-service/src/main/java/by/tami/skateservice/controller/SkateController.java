@@ -1,7 +1,7 @@
 package by.tami.skateservice.controller;
 
 import by.tami.skateservice.dto.*;
-import by.tami.skateservice.service.GetSkateResponse;
+import by.tami.skateservice.dto.GetSkateResponse;
 import by.tami.skateservice.service.SkateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

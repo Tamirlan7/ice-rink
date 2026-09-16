@@ -17,7 +17,7 @@ public interface SkateRepository extends JpaRepository<Skate, Long> {
     @Query("""
         SELECT s
         FROM Skate s
-        WHERE s.id == null OR s.id > :lastId
+        WHERE :lastId IS NULL OR s.id > :lastId
         ORDER BY s.id ASC
     """)
     List<Skate> fetchNextPage(@Param("lastId") Long lastId, Pageable pageable);

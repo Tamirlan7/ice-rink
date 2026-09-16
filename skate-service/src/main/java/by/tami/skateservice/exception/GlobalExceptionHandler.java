@@ -1,7 +1,5 @@
 package by.tami.skateservice.exception;
 
-import by.tami.userservice.exception.BadRequestException;
-import by.tami.userservice.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
