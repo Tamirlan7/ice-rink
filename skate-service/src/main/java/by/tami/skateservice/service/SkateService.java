@@ -48,6 +48,8 @@ public class SkateService {
     }
 
     public CreateSkateResponse createSkate(CreateSkateArgs args) {
+
+        /* idk why I have two identifiers, but I'll let it stay */
         if (skateRepository.existsBySkateIdentityNumber(args.getSkateIdentityNumber())) {
             throw new BadRequestException("Коньки с таким идентификатором " + args.getSkateIdentityNumber() + " уже существует");
         }
