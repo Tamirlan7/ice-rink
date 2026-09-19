@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS t_pricing
+(
+    id         SERIAL PRIMARY KEY,
+    price      INTEGER      NOT NULL,
+    category   VARCHAR(255) NOT NULL UNIQUE,
+    created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+)
