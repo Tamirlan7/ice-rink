@@ -11,6 +11,7 @@
         <option value="$PROJECT_DIR$/user-service/pom.xml" />
         <option value="$PROJECT_DIR$/skate-service/pom.xml" />
         <option value="$PROJECT_DIR$/config-server/pom.xml" />
+        <option value="$PROJECT_DIR$/pricing-service/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

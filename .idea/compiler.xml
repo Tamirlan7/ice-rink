@@ -11,7 +11,7 @@
         <module name="eureka-server" />
         <module name="config-server" />
       </profile>
-      <profile name="Annotation profile for skate-service" enabled="true">
+      <profile name="Annotation profile for pricing-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -19,8 +19,9 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
         </processorPath>
         <module name="skate-service" />
-        <module name="ticket-service" />
         <module name="user-service" />
+        <module name="pricing-service" />
+        <module name="ticket-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -33,6 +34,7 @@
       <module name="auth-service" options="-parameters" />
       <module name="config-server" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
+      <module name="pricing-service" options="-parameters" />
       <module name="skate-service" options="-parameters" />
       <module name="ticket-service" options="-parameters" />
       <module name="user-service" options="-parameters" />

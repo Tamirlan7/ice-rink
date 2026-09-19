@@ -1,0 +1,16 @@
+meta {
+  name: get skates (cursor based)
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{api_url}}/skates?size=10
+  body: none
+  auth: none
+}
+
+query {
+  size: 10
+  ~cursor: MTA
+}

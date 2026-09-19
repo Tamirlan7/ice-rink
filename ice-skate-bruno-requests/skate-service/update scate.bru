@@ -1,0 +1,19 @@
+meta {
+  name: update scate
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{api_url}}/skates/21
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "sex": "FEMALE",
+    "size": 45,
+    "isAvailable": false
+  }
+}

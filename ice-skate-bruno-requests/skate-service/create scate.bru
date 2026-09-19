@@ -1,0 +1,20 @@
+meta {
+  name: create scate
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{api_url}}/skates
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "skateIdentityNumber": 2456,
+    "sex": "MALE",
+    "size": 45,
+    "isAvailable": false
+  }
+}
