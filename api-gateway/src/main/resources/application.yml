@@ -41,6 +41,13 @@ spring:
               filters:
                 - AuthenticationFilter
 
+            - id: pricing-service-route
+              uri: lb://pricing-service
+              predicates:
+                - Path=/api/v1/pricing/**
+              filters:
+                - AuthenticationFilter
+
 eureka:
   instance:
     prefer-ip-address: true
