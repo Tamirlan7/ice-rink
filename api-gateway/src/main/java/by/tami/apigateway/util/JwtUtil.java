@@ -1,5 +1,6 @@
 package by.tami.apigateway.util;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +14,7 @@ import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.function.Function;
 
 @Component
 public class JwtUtil {
@@ -43,6 +45,16 @@ public class JwtUtil {
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();
+    }
+
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        return claimsResolver.apply(
+                Jwts.parser()
+                        .verifyWith(getPublicKey())
+                        .build()
+                        .parseSignedClaims(token)
+                        .getPayload()
+        );
     }
 
     public boolean validateToken(String token) {

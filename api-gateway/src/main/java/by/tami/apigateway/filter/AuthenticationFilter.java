@@ -37,10 +37,12 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
             }
 
             String userId = jwtUtil.extractUserId(authHeader);
+            String role = jwtUtil.extractClaim(authHeader, claims -> claims.get("role", String.class));
 
             var mutatedExchange = exchange.mutate()
                     .request(exchange.getRequest().mutate()
                             .header("X-User-Id", userId)
+                            .header("X-User-Role", role)
                             .build())
                     .build();
 

@@ -69,6 +69,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .subject(user.getId().toString())
                 .issuedAt(new Date())
+                .claim("role", user.getRole().toString())
                 .expiration(Date.from(Instant.now().plusSeconds(60 * 60 * 24)))
                 .signWith(getPrivateKey())
                 .compact();

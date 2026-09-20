@@ -1,5 +1,6 @@
 package by.tami.pricingservice.controller;
 
+import by.tami.pricingservice.annotations.RequiredRole;
 import by.tami.pricingservice.dto.*;
 import by.tami.pricingservice.service.PricingService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,20 @@ public class PricingController {
         return ResponseEntity.ok(pricingService.getPricingById(id));
     }
 
+
+    @GetMapping("/test")
+    public String testUser() {
+        return "Hello User!";
+    }
+
+    @GetMapping("/test/admin")
+    @RequiredRole({"ADMIN"})
+    public String test() {
+        return "Hello Admin!";
+    }
+
     @PostMapping
+    @RequiredRole({"ADMIN"})
     public ResponseEntity<CreatePricingResponse> createPricing(
             @RequestBody CreatePricingArgs args
     ) {
