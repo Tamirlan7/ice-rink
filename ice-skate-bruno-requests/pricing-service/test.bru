@@ -1,0 +1,15 @@
+meta {
+  name: test
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{api_url}}/pricing/test
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{bearer_token}}
+}

@@ -1,0 +1,25 @@
+meta {
+  name: login as user
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{api_url}}/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "phoneNumber": "+77066651164",
+    "password": "12345678"
+  }
+}
+
+script:post-response {
+  if (res.body && res.body.accessToken) {
+    bru.setEnvVar("bearer_token", res.body.accessToken)
+  }
+  
+}
