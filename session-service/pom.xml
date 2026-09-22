@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>by.tami</groupId>
-    <artifactId>season-service</artifactId>
+    <artifactId>session-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>season-service</name>
     <description>season-service</description>

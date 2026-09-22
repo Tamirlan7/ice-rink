@@ -1,10 +1,10 @@
-package by.tami.seasonservice;
+package by.tami.sessionservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SeasonServiceApplicationTests {
+class SessionServiceApplicationTests {
 
     @Test
     void contextLoads() {

@@ -1,13 +1,13 @@
-package by.tami.seasonservice;
+package by.tami.sessionservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SeasonServiceApplication {
+public class SessionServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SeasonServiceApplication.class, args);
+        SpringApplication.run(SessionServiceApplication.class, args);
     }
 
 }

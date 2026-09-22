@@ -13,6 +13,7 @@
         <option value="$PROJECT_DIR$/config-server/pom.xml" />
         <option value="$PROJECT_DIR$/pricing-service/pom.xml" />
         <option value="$PROJECT_DIR$/season-service/pom.xml" />
+        <option value="$PROJECT_DIR$/session-service/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
