@@ -48,6 +48,13 @@ spring:
               filters:
                 - AuthenticationFilter
 
+            - id: session-service-route
+              uri: lb://session-service
+              predicates:
+                - Path=/api/v1/sessions/**
+              filters:
+                - AuthenticationFilter
+
 eureka:
   instance:
     prefer-ip-address: true

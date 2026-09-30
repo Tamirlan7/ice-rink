@@ -9,10 +9,15 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Repository
 public interface SessionRepository extends JpaRepository<Session, Long> {
     boolean existsByDateAndStartTime(LocalDate date, LocalTime startTime);
+
+    List<Session> findByDateOrderByStartTime(LocalDate date);
+
+    List<Session> findByDateBetweenOrderByDateAscStartTimeAsc(LocalDate from, LocalDate to);
 
     // атомарная резервация места — понадобится при покупке билета
     @Modifying
