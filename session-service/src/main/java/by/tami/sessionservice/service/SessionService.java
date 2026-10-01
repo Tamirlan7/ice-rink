@@ -14,7 +14,6 @@ public class SessionService {
 
     private final SessionRepository sessionRepository;
 
-
     public GetSessionsResponse getSessionsByDate(LocalDate date) {
         var sessions = sessionRepository.findByDateOrderByStartTime(date).stream()
                 .map(SessionMapper::toDto)

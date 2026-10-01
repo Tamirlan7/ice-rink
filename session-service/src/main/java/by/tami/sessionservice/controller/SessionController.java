@@ -25,7 +25,7 @@ public class SessionController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
-        if (date  == null) {
+        if (date != null) {
             return ResponseEntity.ok(sessionService.getSessionsByDate(date));
         }
 
