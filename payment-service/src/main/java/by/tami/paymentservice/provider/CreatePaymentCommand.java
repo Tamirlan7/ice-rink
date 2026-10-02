@@ -9,6 +9,7 @@ import java.util.UUID;
 @Getter
 @AllArgsConstructor
 public class CreatePaymentCommand {
+    private Long paymentId;   // id уже сохранённой строки Payment — нужен для построения invoiceID
     private Long ticketId;
     private BigDecimal amount;
     private String currency;
