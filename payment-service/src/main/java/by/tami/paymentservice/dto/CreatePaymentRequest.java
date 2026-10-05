@@ -1,4 +1,4 @@
-package by.tami.paymentservice.provider;
+package by.tami.paymentservice.dto;
 
 import by.tami.paymentservice.model.PaymentProviderType;
 import lombok.AllArgsConstructor;
@@ -7,10 +7,9 @@ import lombok.Getter;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Getter
 @AllArgsConstructor
-public class CreatePaymentCommand {
-    private Long paymentId;   // id уже сохранённой строки Payment — нужен для построения invoiceID
+@Getter
+public class CreatePaymentRequest {
     private Long ticketId;
     private BigDecimal amount;
     private String currency;

@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS t_payment
     updated_at          TIMESTAMP           NOT NULL DEFAULT NOW()
 
     CONSTRAINT chk_payment_status CHECK (status IN ('PENDING', 'SUCCEEDED', 'FAILED', 'CANCELED', 'REFUNDED'))
-    CONSTRAINT chk_payment_provider CHECK (provider IN ('HALYK', 'KASPI')),
+    CONSTRAINT chk_payment_provider CHECK (provider IN ('HALYK', 'KASPI', 'MOCK')),
     CONSTRAINT chk_payment_amount CHECK (amount > 0)
 );
 
