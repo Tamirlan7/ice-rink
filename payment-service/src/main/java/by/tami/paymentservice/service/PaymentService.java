@@ -1,5 +1,6 @@
 package by.tami.paymentservice.service;
 
+import by.tami.paymentservice.client.TicketServiceClient;
 import by.tami.paymentservice.dto.CreatePaymentRequest;
 import by.tami.paymentservice.dto.CreatePaymentResponse;
 import by.tami.paymentservice.dto.PaymentDto;
@@ -15,6 +16,7 @@ import by.tami.paymentservice.provider.PaymentProviderRegistry;
 import by.tami.paymentservice.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Optional;
@@ -25,6 +27,7 @@ public class PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final PaymentProviderRegistry paymentProviderRegistry;
+    private final TicketServiceClient ticketServiceClient;
 
     public CreatePaymentResponse createPayment(CreatePaymentRequest request) {
         Optional<Payment> existing = paymentRepository.findByIdempotencyKey(request.getIdempotencyKey());
@@ -58,7 +61,8 @@ public class PaymentService {
         payment = paymentRepository.save(payment);
 
         if (provider.getType() == PaymentProviderType.MOCK) {
-//            markSucceeded(payment);
+            payment.setStatus(PaymentStatus.SUCCEEDED);
+            ticketServiceClient.markAsPaid(payment.getTicketId());
         }
 
         return new CreatePaymentResponse(PaymentMapper.toDto(payment), result.getClientPayload());
