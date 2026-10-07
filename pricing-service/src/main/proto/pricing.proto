@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package pricing;
+
+option java_multiple_files = true;
+option java_package = "com.tami.grpc.pricing";
+
+service PricingService {
+  rpc GetPricings(GetPricingsRequest) returns (GetPricingsResponse);
+}
+
+message GetPricingsRequest {
+
+}
+
+message GetPricingsResponse {
+
+}
