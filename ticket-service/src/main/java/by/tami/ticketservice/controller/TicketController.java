@@ -1,6 +1,7 @@
 package by.tami.ticketservice.controller;
 
 import by.tami.ticketservice.dto.PurchaseTicketArgs;
+import by.tami.ticketservice.dto.PurchaseTicketsRequest;
 import by.tami.ticketservice.service.TicketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,11 +29,13 @@ public class TicketController {
     }
 
     @PostMapping("/purchase")
-    public ResponseEntity<?> purchaseTicket(
-            @RequestBody PurchaseTicketArgs args
+    public ResponseEntity<?> purchaseTickets(
+            @RequestBody PurchaseTicketsRequest req,
+            @RequestHeader("X-User-Id") Long userId
     ) {
+        req.setUserId(userId);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ticketService.purchaseTicket(args));
+                .body(ticketService.purchaseTickets(req));
     }
 
 }

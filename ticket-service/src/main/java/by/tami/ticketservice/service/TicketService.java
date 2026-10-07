@@ -1,5 +1,7 @@
 package by.tami.ticketservice.service;
 
+import by.tami.ticketservice.dto.PurchaseTicketsRequest;
+import by.tami.ticketservice.dto.TicketDto;
 import by.tami.ticketservice.repository.TicketRepository;
 import by.tami.ticketservice.dto.PurchaseTicketArgs;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +13,13 @@ public class TicketService {
 
     private TicketRepository ticketRepository;
 
-    public Object purchaseTicket(PurchaseTicketArgs args) {
+    public TicketDto purchaseTickets(PurchaseTicketsRequest req) {
+        /* fetch the session service */
+
+        /* fetch the pricing service */
+
+        /* fetch the skate service */
+
         return null;
     }
 
