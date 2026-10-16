@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class PricingGrpcClient {
+
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     private final PricingServiceGrpc.PricingServiceBlockingStub pricingStub;
 
     public Map<Long, PricingDto> getPricings() {
