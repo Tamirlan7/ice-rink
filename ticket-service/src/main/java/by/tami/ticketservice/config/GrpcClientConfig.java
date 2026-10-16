@@ -7,5 +7,4 @@ import org.springframework.grpc.client.ImportGrpcClients;
 @Configuration
 @ImportGrpcClients(target = "pricing", types = PricingServiceGrpc.PricingServiceBlockingStub.class)
 public class GrpcClientConfig {
-
 }
