@@ -10,27 +10,29 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class PricingGrpcClient {
     private final PricingServiceGrpc.PricingServiceBlockingStub pricingStub;
 
-    public List<PricingDto> getPricings() {
+    public Map<Long, PricingDto> getPricings() {
         try {
             return pricingStub
                     .withDeadlineAfter(2, TimeUnit.SECONDS)
                     .getPricings(GetPricingsRequest.newBuilder().build())
                     .getPricingsList()
                     .stream().map(PricingMapper::toDto)
-                    .toList();
+                    .collect(Collectors.toMap(PricingDto::getId, Function.identity()));
         } catch (StatusRuntimeException err) {
             switch (err.getStatus().getCode()) {
                 case UNAVAILABLE, DEADLINE_EXCEEDED ->
                         throw new ServiceUnavailableException("pricing-service недоступен");
-                case INVALID_ARGUMENT ->
-                        throw new IllegalArgumentException(err.getStatus().getDescription(), err);
+                case INVALID_ARGUMENT -> throw new IllegalArgumentException(err.getStatus().getDescription(), err);
                 default -> throw err;
             }
         }
