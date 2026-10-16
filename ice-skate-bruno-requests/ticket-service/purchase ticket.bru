@@ -1,0 +1,27 @@
+meta {
+  name: purchase ticket
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{api_url}}/tickets/purchase
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearer_token}}
+}
+
+body:json {
+  {
+    "tickets": [
+      {
+        "skateId": 1,
+        "sessionId": 2,
+        "pricingId": 3
+      }
+    ]
+  }
+}
