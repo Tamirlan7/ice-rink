@@ -40,7 +40,7 @@ public class TicketService {
             }
         }
 
-        /* fetch the skate service */
+        /* fetch the skate service (reserve the skates) */
 
         return null;
     }

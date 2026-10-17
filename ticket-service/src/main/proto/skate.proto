@@ -1,0 +1,17 @@
+syntax = "proto3";
+package skate;
+
+option java_multiple_files = true;
+option java_package = "by.tami.grpc.skate";
+
+service SkateReservationService {
+  rpc ReserveSkates(ReserveSkatesReq) returns (ReserveSkatesRes);
+}
+
+message ReserveSkatesReq {
+  repeated int64 skateIds = 1;
+}
+
+message ReserveSkatesRes {
+  repeated int64 skateIds = 1;
+}
