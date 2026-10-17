@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.grpc.server.service.GrpcService;
 import by.tami.grpc.skate.SkateReservationServiceGrpc;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @GrpcService
@@ -18,11 +19,17 @@ public class SkateGrpcService extends SkateReservationServiceGrpc.SkateReservati
 
     @Override
     public void reserveSkates(ReserveSkatesReq request, StreamObserver<ReserveSkatesRes> responseObserver) {
+        List<Long> reservedSkateIds = new ArrayList<>();
 
+        request.getItemsList()
+                .forEach(skateReq -> {
+                    /* reserve those skates */
+                    reservedSkateIds.add(skateReq.getSkateId());
+                });
 
 
         responseObserver.onNext(ReserveSkatesRes.newBuilder()
-                        .addAllSkateIds(skateIds)
+                .addAllSkateIds(reservedSkateIds)
                 .build());
         responseObserver.onCompleted();
 
