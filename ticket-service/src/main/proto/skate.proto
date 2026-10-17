@@ -9,7 +9,13 @@ service SkateReservationService {
 }
 
 message ReserveSkatesReq {
-  repeated int64 skateIds = 1;
+  repeated int64 SkateItem = 1;
+}
+
+message SkateItem {
+  int64 skateId = 1;
+  int64 sessionId = 2;
+  int64 ticketId = 3;
 }
 
 message ReserveSkatesRes {
