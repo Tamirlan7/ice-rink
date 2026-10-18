@@ -21,10 +21,10 @@ public class SkateGrpcService extends SkateReservationServiceGrpc.SkateReservati
     public void reserveSkates(ReserveSkatesReq request, StreamObserver<ReserveSkatesRes> responseObserver) {
         List<Long> reservedSkateIds = new ArrayList<>();
 
-        request.getItemsList()
-                .forEach(skateReq -> {
+        request.getSkateIdsList()
+                .forEach(skateId -> {
                     /* reserve those skates */
-                    reservedSkateIds.add(skateReq.getSkateId());
+                    reservedSkateIds.add(skateId);
                 });
 
 
