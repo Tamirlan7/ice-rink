@@ -8,6 +8,7 @@ import by.tami.skateservice.model.ReservationStatus;
 import by.tami.skateservice.model.Skate;
 import by.tami.skateservice.model.SkateReservation;
 import by.tami.skateservice.repository.SkateRepository;
+import by.tami.skateservice.repository.SkateReservationRepository;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.grpc.server.service.GrpcService;
@@ -26,10 +27,10 @@ import java.util.stream.Collectors;
 public class SkateGrpcService extends SkateReservationServiceGrpc.SkateReservationServiceImplBase {
 
     private final SkateRepository skateRepository;
+    private final SkateReservationRepository skateReservationRepository;
 
     @Override
     public void reserveSkates(ReserveSkatesReq request, StreamObserver<ReserveSkatesRes> responseObserver) {
-        List<Long> reservedSkateIds = new ArrayList<>();
         List<Skate> skates = skateRepository.findAllById(request.getSkateIdsList());
 
         if (skates.size() != request.getSkateIdsList().size()) {
@@ -54,8 +55,10 @@ public class SkateGrpcService extends SkateReservationServiceGrpc.SkateReservati
                         .build())
                 .toList();
 
+        skateReservationRepository.saveAll(reservations);
+
         responseObserver.onNext(ReserveSkatesRes.newBuilder()
-                .addAllSkateIds(reservedSkateIds)
+                .addAllSkateIds(request.getSkateIdsList())
                 .build());
         responseObserver.onCompleted();
     }
