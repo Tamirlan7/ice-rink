@@ -2,6 +2,7 @@ package by.tami.skateservice.service;
 
 import by.tami.grpc.skate.ReserveSkatesReq;
 import by.tami.skateservice.exception.BadRequestException;
+import by.tami.skateservice.exception.ConflictException;
 import by.tami.skateservice.exception.NotFoundException;
 import by.tami.skateservice.model.ReservationStatus;
 import by.tami.skateservice.model.Skate;
@@ -9,6 +10,7 @@ import by.tami.skateservice.model.SkateReservation;
 import by.tami.skateservice.repository.SkateRepository;
 import by.tami.skateservice.repository.SkateReservationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -40,6 +42,9 @@ public class SkateReservationService {
                 Collectors.toMap(Skate::getId, Function.identity())
         );
 
+        Instant now = Instant.now();
+        skateReservationRepository.expireOverdue(now);
+
         List<SkateReservation> reservations = skates.stream()
                 .map(skate -> SkateReservation.builder()
                         .skate(skatesById.get(skate.getId()))
@@ -50,8 +55,11 @@ public class SkateReservationService {
                         .build())
                 .toList();
 
-        skateReservationRepository.saveAllAndFlush(reservations);
-        return request.getSkateIdsList();
+        try {
+            skateReservationRepository.saveAllAndFlush(reservations);
+            return request.getSkateIdsList();
+        } catch (DataIntegrityViolationException e) {
+            throw new ConflictException("Коньки уже заняты на этот сеанс");
+        }
     }
-
 }
