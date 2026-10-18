@@ -13,7 +13,7 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>>  handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         Map<String, String> response = new HashMap<>();
         ex.getFieldErrors().forEach((fieldError) -> {
             response.put(fieldError.getField(), fieldError.getDefaultMessage());
@@ -26,16 +26,23 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<Map<String, String>>  handleBadRequestException(BadRequestException ex) {
+    public ResponseEntity<Map<String, String>> handleBadRequestException(BadRequestException ex) {
         return ResponseEntity
                 .badRequest()
                 .body(Map.of("message", ex.getMessage()));
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<Map<String, String>>  handleNotFoundException(NotFoundException ex) {
+    public ResponseEntity<Map<String, String>> handleNotFoundException(NotFoundException ex) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
+                .body(Map.of("message", ex.getMessage()));
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<Map<String, String>> handleConflictException(ConflictException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
                 .body(Map.of("message", ex.getMessage()));
     }
 }

@@ -3,12 +3,14 @@ package by.tami.skateservice.service;
 import by.tami.grpc.skate.ReserveSkatesReq;
 import by.tami.grpc.skate.ReserveSkatesRes;
 import by.tami.skateservice.exception.BadRequestException;
+import by.tami.skateservice.exception.ConflictException;
 import by.tami.skateservice.exception.NotFoundException;
 import by.tami.skateservice.model.ReservationStatus;
 import by.tami.skateservice.model.Skate;
 import by.tami.skateservice.model.SkateReservation;
 import by.tami.skateservice.repository.SkateRepository;
 import by.tami.skateservice.repository.SkateReservationRepository;
+import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.grpc.server.service.GrpcService;
@@ -26,40 +28,27 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SkateGrpcService extends SkateReservationServiceGrpc.SkateReservationServiceImplBase {
 
-    private final SkateRepository skateRepository;
-    private final SkateReservationRepository skateReservationRepository;
+
+    private final SkateReservationService skateReservationService;
 
     @Override
     public void reserveSkates(ReserveSkatesReq request, StreamObserver<ReserveSkatesRes> responseObserver) {
-        List<Skate> skates = skateRepository.findAllById(request.getSkateIdsList());
+        try {
+            List<Long> reservationIds = skateReservationService.reserveSkates(request);
 
-        if (skates.size() != request.getSkateIdsList().size()) {
-            throw new NotFoundException("Коньки не найдены");
+            responseObserver.onNext(ReserveSkatesRes.newBuilder()
+                    .addAllSkateIds(reservationIds)
+                    .build());
+            responseObserver.onCompleted();
+
+        } catch (NotFoundException e) {
+            responseObserver.onError(Status.NOT_FOUND.withDescription(e.getMessage()).asRuntimeException());
+        } catch (BadRequestException e) {
+            responseObserver.onError(Status.INVALID_ARGUMENT.withDescription(e.getMessage()).asRuntimeException());
+        } catch (ConflictException e) {
+            responseObserver.onError(Status.FAILED_PRECONDITION.withDescription(e.getMessage()).asRuntimeException());
+        } catch (Exception e) {
+            responseObserver.onError(Status.INTERNAL.withDescription("Internal error").asRuntimeException());
         }
-
-        if (skates.stream().anyMatch(s -> !s.getIsAvailable())) {
-            throw new BadRequestException("Коньки не в строю");
-        }
-
-        Map<Long, Skate> skatesById = skates.stream().collect(
-                Collectors.toMap(Skate::getId, Function.identity())
-        );
-
-        List<SkateReservation> reservations = skates.stream()
-                .map(skate -> SkateReservation.builder()
-                        .skate(skatesById.get(skate.getId()))
-                        .sessionId(request.getSessionId())
-                        .ticketId(request.getTicketId())
-                        .status(ReservationStatus.RELEASED)
-                        .reservedUntil(Instant.now().plus(15, ChronoUnit.MINUTES))
-                        .build())
-                .toList();
-
-        skateReservationRepository.saveAll(reservations);
-
-        responseObserver.onNext(ReserveSkatesRes.newBuilder()
-                .addAllSkateIds(request.getSkateIdsList())
-                .build());
-        responseObserver.onCompleted();
     }
 }
