@@ -50,7 +50,8 @@ public class SkateReservationService {
                         .build())
                 .toList();
 
-        skateReservationRepository.saveAll(reservations);
+        skateReservationRepository.saveAllAndFlush(reservations);
+        return request.getSkateIdsList();
     }
 
 }
