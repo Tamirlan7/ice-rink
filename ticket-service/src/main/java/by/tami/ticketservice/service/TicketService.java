@@ -6,17 +6,19 @@ import by.tami.ticketservice.dto.PricingDto;
 import by.tami.ticketservice.dto.PurchaseTicketsRequest;
 import by.tami.ticketservice.dto.TicketDto;
 import by.tami.ticketservice.exception.NotFoundException;
+import by.tami.ticketservice.mapper.TicketMapper;
 import by.tami.ticketservice.model.Ticket;
 import by.tami.ticketservice.model.TicketStatus;
 import by.tami.ticketservice.repository.TicketRepository;
 import by.tami.ticketservice.dto.PurchaseTicketArgs;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,14 +26,16 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TicketService {
 
     private static final Duration TICKET_TTL = Duration.ofMinutes(15);
     private final PricingGrpcClient pricingGrpcClient;
     private final SkateGrpcClient skateGrpcClient;
-    private TicketRepository ticketRepository;
+    private final TicketRepository ticketRepository;
+    private final TransactionTemplate transactionTemplate;
 
-    public TicketDto purchaseTickets(PurchaseTicketsRequest req) {
+    public List<TicketDto> purchaseTickets(PurchaseTicketsRequest req) {
         /* fetch the session service */
 
         /* fetch the pricing service */
@@ -69,9 +73,27 @@ public class TicketService {
             after we saved (reserved) the tickets
             so we get their ids first
         * */
-        skateGrpcClient.reserveSkates(tickets);
+        try {
+            skateGrpcClient.reserveSkates(tickets);
+        } catch (Exception e) {
+            cancelTickets(tickets);
+            throw e;
+        }
 
-        return null;
+        return tickets.stream()
+                .map(TicketMapper::toDto)
+                .toList();
+    }
+
+    private void cancelTickets(List<Ticket> tickets) {
+        List<Long> ids = tickets.stream().map(Ticket::getId).toList();
+        try {
+            transactionTemplate.executeWithoutResult(status ->
+                    ticketRepository.updateStatus(ids, TicketStatus.PENDING, TicketStatus.CANCELLED));
+        } catch (RuntimeException e) {
+            // не удалось отменить (например, упала БД) — билеты всё равно истекут по TTL
+            log.error("Failed to cancel tickets {} after skate reservation failure", ids, e);
+        }
     }
 
 }
