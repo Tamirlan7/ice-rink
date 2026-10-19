@@ -1,23 +1,19 @@
 package by.tami.ticketservice.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
+import lombok.*;
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
+import java.time.Instant;
 
 @Entity
 @Table(name = "t_ticket")
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Builder
 public class Ticket {
-
-    /* ticket model` */
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,22 +22,26 @@ public class Ticket {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(name = "payment_id", nullable = false)
-    private Long paymentId;
+    @Column(name = "session_id", nullable = false)
+    private Long sessionId;
 
-    @Column(name = "season_id", nullable = false)
-    private Long seasonId;
+    @Column(name = "skate_id")
+    private Long skateId;  /* null — билет без коньков */
 
-    @Column(name = "adults_quantity", nullable = false)
-    private Integer adultsQuantity = 0;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal price;
 
-    @Column(name = "students_quantity", nullable = false)
-    private Integer studentsQuantity = 0;
+    @Column(name = "pricing_category", nullable = false, length = 20)
+    private String pricingCategory;
 
-    @Column(name = "children_quantity", nullable = false)
-    private Integer childrenQuantity = 0;
+    @Column(nullable = false, length = 20)
+    @Enumerated(EnumType.STRING)
+    private TicketStatus status;
 
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    @Column(name = "expires_at")
+    private Instant expiresAt;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @Builder.Default
+    private Instant createdAt = Instant.now();
 }
