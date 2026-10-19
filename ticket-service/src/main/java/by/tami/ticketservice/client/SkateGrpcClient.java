@@ -49,7 +49,7 @@ public class SkateGrpcClient {
                 case INVALID_ARGUMENT -> throw new BadRequestException(message);
                 case FAILED_PRECONDITION -> throw new ConflictException(message);
                 case UNAVAILABLE, DEADLINE_EXCEEDED ->
-                        throw new ServiceUnavailableException("skate-service недоступен", e);
+                        throw new ServiceUnavailableException("skate-service недоступен");
                 default -> throw e;
             }
         }
