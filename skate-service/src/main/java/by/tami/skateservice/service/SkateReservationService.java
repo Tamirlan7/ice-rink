@@ -12,6 +12,7 @@ import by.tami.skateservice.repository.SkateReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -27,6 +28,7 @@ public class SkateReservationService {
     private final SkateRepository skateRepository;
     private final SkateReservationRepository skateReservationRepository;
 
+    @Transactional
     public List<Long> reserveSkates(ReserveSkatesReq request) {
         List<Skate> skates = skateRepository.findAllById(request.getSkateIdsList());
 

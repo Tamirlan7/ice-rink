@@ -16,6 +16,6 @@ public interface SkateReservationRepository extends JpaRepository<SkateReservati
            update SkateReservation r set r.status = ReservationStatus.EXPIRED
            where r.status = ReservationStatus.RESERVED and r.reservedUntil < :now
            """)
-    int expireOverdue(Instant now);
+    void expireOverdue(Instant now);
 
 }
