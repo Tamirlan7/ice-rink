@@ -14,8 +14,8 @@ import java.util.List;
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
     @Modifying
     @Query("""
-           update Ticket t set t.status = :to
-           where t.id in :ids and t.status = :from
-           """)
-    int updateStatus(Collection<Long> ids, TicketStatus from, TicketStatus to);
+            UPDATE Ticket t SET t.status = :to
+            WHERE t.id in :ids AND t.status = :from
+            """)
+    void updateStatus(Collection<Long> ids, TicketStatus from, TicketStatus to);
 }
