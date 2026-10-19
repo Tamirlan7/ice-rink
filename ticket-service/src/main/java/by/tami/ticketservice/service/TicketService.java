@@ -38,6 +38,7 @@ public class TicketService {
     public List<TicketDto> purchaseTickets(PurchaseTicketsRequest req) {
         /* fetch the session service */
 
+
         /* fetch the pricing service */
         Map<Long, PricingDto> pricings = pricingGrpcClient.getPricings();
         Set<Long> reqPricings = req.getTickets().stream()

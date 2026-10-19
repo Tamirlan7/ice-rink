@@ -1,0 +1,35 @@
+syntax = "proto3";
+package session;
+
+option java_multiple_files = true;
+option java_package = "by.tami.grpc.session";
+
+import "google/type/date.proto";
+import "google/type/timeofday.proto";
+
+service SessionService {
+  rpc GetSessionById (GetSessionByIdRequest) returns (GetSessionByIdResponse);
+}
+
+message GetSessionByIdRequest {
+  int64 sessionId = 1;
+}
+
+message GetSessionByIdResponse {
+  reserved 2;
+  reserved "templateId";
+
+  int64 id = 1;
+  google.type.Date date = 3;
+  google.type.TimeOfDay startTime = 4;
+  google.type.TimeOfDay endTime = 5;
+  int32 allowedPeopleQuantity = 6;
+  int32 currentlyPeopleQuantity = 7;
+  SessionStatusProto status = 8;
+}
+
+enum SessionStatusProto {
+  SESSION_STATUS_SCHEDULED = 0;
+  SESSION_STATUS_CANCELLED = 1;
+  SESSION_STATUS_COMPLETED = 2;
+}
