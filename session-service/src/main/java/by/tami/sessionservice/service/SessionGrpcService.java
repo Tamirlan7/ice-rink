@@ -5,6 +5,8 @@ import by.tami.grpc.session.GetSessionByIdResponse;
 import by.tami.grpc.session.SessionServiceGrpc;
 import by.tami.sessionservice.exception.NotFoundException;
 import by.tami.sessionservice.mapper.SessionProtoMapper;
+import io.grpc.Status;
+import io.grpc.StatusException;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.grpc.server.service.GrpcService;
@@ -22,7 +24,9 @@ public class SessionGrpcService extends SessionServiceGrpc.SessionServiceImplBas
             responseObserver.onNext(SessionProtoMapper.toProto(s));
             responseObserver.onCompleted();
         } catch (NotFoundException e) {
-            responseObserver.onError(e);
+            responseObserver.onError(Status.NOT_FOUND.withDescription(e.getMessage()).asRuntimeException());
+        } catch (Exception e) {
+            responseObserver.onError(Status.INTERNAL.withDescription("Internal error").asRuntimeException());
         }
     }
 }
