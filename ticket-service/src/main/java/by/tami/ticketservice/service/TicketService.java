@@ -16,6 +16,7 @@ import by.tami.ticketservice.model.Ticket;
 import by.tami.ticketservice.model.TicketStatus;
 import by.tami.ticketservice.repository.TicketRepository;
 import by.tami.ticketservice.dto.PurchaseTicketArgs;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -62,7 +63,7 @@ public class TicketService {
         }
     }
 
-    public List<TicketDto> purchaseTickets(PurchaseTicketsRequest req) {
+    public List<TicketDto> purchaseTickets(@Valid PurchaseTicketsRequest req) {
         /* fetch the session service */
         /* inside here it's already handling the exceptions, so don't worry */
         var session = sessionGrpcClient.getSessionById(req.getSessionId());
@@ -82,18 +83,21 @@ public class TicketService {
                 throw new NotFoundException("Прайс для данной категории с id " + reqPricingId + " не найден");
             }
         }
-
+        Instant expiresAt = Instant.now().plus(TICKET_TTL);
         /* save the tickets before reserving skates */
         List<Ticket> tickets = req.getTickets().stream()
-                .map(ticketReq -> Ticket.builder()
-                        .userId(req.getUserId())
-                        .skateId(ticketReq.getSkateId())
-                        .sessionId(session.getId())
-                        .status(TicketStatus.PENDING)
-                        .expiresAt(Instant.now().plus(TICKET_TTL))
-                        .price(BigDecimal.valueOf(pricings.get(ticketReq.getPricingId()).getPrice()))
-                        .pricingCategory(pricings.get(ticketReq.getPricingId()).getCategory())
-                        .build())
+                .map(ticketReq -> {
+                    PricingDto pricing = pricings.get(ticketReq.getPricingId());
+                    return Ticket.builder()
+                            .userId(req.getUserId())
+                            .skateId(ticketReq.getSkateId())
+                            .sessionId(session.getId())
+                            .status(TicketStatus.PENDING)
+                            .expiresAt(expiresAt)
+                            .price(BigDecimal.valueOf(pricing.getPrice()))
+                            .pricingCategory(pricing.getCategory())
+                            .build();
+                })
                 .toList();
 
         tickets = ticketRepository.saveAll(tickets);
@@ -125,5 +129,4 @@ public class TicketService {
             log.error("Failed to cancel tickets {} after skate reservation failure", ids, e);
         }
     }
-
 }
