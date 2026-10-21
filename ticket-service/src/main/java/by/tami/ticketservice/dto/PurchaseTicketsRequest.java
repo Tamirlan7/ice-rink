@@ -9,5 +9,7 @@ import java.util.List;
 @Getter
 public class PurchaseTicketsRequest {
     private Long userId;
+    private Long sessionId;
+
     private List<PurchaseTicketArgs> tickets;
 }

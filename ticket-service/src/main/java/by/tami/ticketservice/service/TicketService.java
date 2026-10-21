@@ -1,10 +1,15 @@
 package by.tami.ticketservice.service;
 
+import by.tami.grpc.session.GetSessionByIdResponse;
+import by.tami.grpc.session.SessionStatusProto;
 import by.tami.ticketservice.client.PricingGrpcClient;
+import by.tami.ticketservice.client.SessionGrpcClient;
 import by.tami.ticketservice.client.SkateGrpcClient;
 import by.tami.ticketservice.dto.PricingDto;
 import by.tami.ticketservice.dto.PurchaseTicketsRequest;
 import by.tami.ticketservice.dto.TicketDto;
+import by.tami.ticketservice.exception.BadRequestException;
+import by.tami.ticketservice.exception.ConflictException;
 import by.tami.ticketservice.exception.NotFoundException;
 import by.tami.ticketservice.mapper.TicketMapper;
 import by.tami.ticketservice.model.Ticket;
@@ -17,8 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.math.BigDecimal;
-import java.time.Duration;
-import java.time.Instant;
+import java.time.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,13 +35,38 @@ public class TicketService {
 
     private static final Duration TICKET_TTL = Duration.ofMinutes(15);
     private final PricingGrpcClient pricingGrpcClient;
+    private final SessionGrpcClient sessionGrpcClient;
     private final SkateGrpcClient skateGrpcClient;
     private final TicketRepository ticketRepository;
     private final TransactionTemplate transactionTemplate;
+    private static final ZoneId RINK_ZONE = ZoneId.of("Asia/Almaty");
+
+    private void validateSession(GetSessionByIdResponse session, int ticketsCount) {
+        if (session.getStatus() != SessionStatusProto.SESSION_STATUS_SCHEDULED) {
+            throw new BadRequestException("Сеанс недоступен для покупки");
+        }
+
+        LocalDateTime start = LocalDateTime.of(
+                LocalDate.of(session.getDate().getYear(), session.getDate().getMonth(), session.getDate().getDay()),
+                LocalTime.of(session.getStartTime().getHours(), session.getStartTime().getMinutes())
+        );
+
+        if (start.isAfter(LocalDateTime.now())) {
+            throw new BadRequestException("Сеанс уже начался");
+        }
+
+        int freePlaces = session.getAllowedPeopleQuantity() - session.getCurrentlyPeopleQuantity();
+
+        if (ticketsCount > freePlaces) {
+            throw new ConflictException("Недостаточно мест: осталось " + freePlaces);
+        }
+    }
 
     public List<TicketDto> purchaseTickets(PurchaseTicketsRequest req) {
         /* fetch the session service */
-
+        /* inside here it's already handling the exceptions, so don't worry */
+        var session = sessionGrpcClient.getSessionById(req.getSessionId());
+        validateSession(session, req.getTickets().size());
 
         /* fetch the pricing service */
         Map<Long, PricingDto> pricings = pricingGrpcClient.getPricings();
@@ -59,7 +88,7 @@ public class TicketService {
                 .map(ticketReq -> Ticket.builder()
                         .userId(req.getUserId())
                         .skateId(ticketReq.getSkateId())
-                        .sessionId(ticketReq.getSessionId())
+                        .sessionId(session.getId())
                         .status(TicketStatus.PENDING)
                         .expiresAt(Instant.now().plus(TICKET_TTL))
                         .price(BigDecimal.valueOf(pricings.get(ticketReq.getPricingId()).getPrice()))

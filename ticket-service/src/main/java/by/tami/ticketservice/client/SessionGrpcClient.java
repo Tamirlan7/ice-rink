@@ -5,6 +5,7 @@ import by.tami.grpc.session.GetSessionByIdResponse;
 import by.tami.grpc.session.SessionServiceGrpc;
 import by.tami.ticketservice.exception.BadRequestException;
 import by.tami.ticketservice.exception.NotFoundException;
+import by.tami.ticketservice.exception.ServiceUnavailableException;
 import io.grpc.StatusRuntimeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -27,11 +28,13 @@ public class SessionGrpcClient {
             return stub.withDeadlineAfter(Duration.ofSeconds(2))
                     .getSessionById(req);
         } catch (StatusRuntimeException ex) {
-            String message = ex.getMessage();
+            String message = ex.getStatus().getDescription();
 
             switch (ex.getStatus().getCode()) {
                 case NOT_FOUND -> throw new NotFoundException(message);
                 case INTERNAL -> throw new BadRequestException(message);
+                case UNAVAILABLE, DEADLINE_EXCEEDED ->
+                        throw new ServiceUnavailableException("session-service недоступен");
                 default -> throw ex;
             }
         }

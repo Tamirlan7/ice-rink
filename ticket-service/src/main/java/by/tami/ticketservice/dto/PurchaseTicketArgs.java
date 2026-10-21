@@ -7,6 +7,5 @@ import lombok.Setter;
 @Getter
 public class PurchaseTicketArgs {
     private Long skateId;
-    private Long sessionId;
     private Long pricingId;
 }
