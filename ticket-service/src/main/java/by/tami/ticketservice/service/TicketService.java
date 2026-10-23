@@ -101,6 +101,16 @@ public class TicketService {
                 .toList();
 
         tickets = ticketRepository.saveAll(tickets);
+        List<Long> ticketIds = tickets.stream().map(Ticket::getId).toList();
+
+        /* reserve seats in the session */
+        try {
+            sessionGrpcClient.reserveSeats(session.getId(), ticketIds);
+        } catch (Exception e) {
+            sessionGrpcClient.releaseSeatsQuietly(ticketIds);   // на случай, если резерв прошёл, а ответ потерялся
+            cancelTickets(tickets);
+            throw e;
+        }
 
         /*
             fetch the skate service (reserve the skates)
@@ -110,6 +120,7 @@ public class TicketService {
         try {
             skateGrpcClient.reserveSkates(tickets);
         } catch (Exception e) {
+            sessionGrpcClient.releaseSeatsQuietly(ticketIds);
             cancelTickets(tickets);
             throw e;
         }
