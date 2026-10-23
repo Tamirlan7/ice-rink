@@ -17,6 +17,7 @@ public class SessionService {
     private final SessionRepository sessionRepository;
 
     public Session getSessionById(Long id) {
+        /* Long sessionId = 1; */
         return sessionRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Сессия с Id " + id +" не найдена"));
     }
