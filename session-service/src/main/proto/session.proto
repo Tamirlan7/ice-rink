@@ -9,7 +9,11 @@ import "google/type/timeofday.proto";
 
 service SessionService {
   rpc GetSessionById (GetSessionByIdRequest) returns (GetSessionByIdResponse);
+  rpc ReserveSeats (ReserveSeatsRequest) returns (ReserveSeatsResponse);
 }
+
+message ReserveSeatsRequest {}
+message ReserveSeatsResponse {}
 
 message GetSessionByIdRequest {
   int64 sessionId = 1;
