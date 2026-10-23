@@ -107,7 +107,7 @@ public class TicketService {
         try {
             sessionGrpcClient.reserveSeats(session.getId(), ticketIds);
         } catch (Exception e) {
-            sessionGrpcClient.releaseSeatsQuietly(ticketIds);   // на случай, если резерв прошёл, а ответ потерялся
+            sessionGrpcClient.releaseSeatsQuietly(ticketIds);   /* на случай, если резерв прошёл, а ответ потерялся */
             cancelTickets(tickets);
             throw e;
         }
