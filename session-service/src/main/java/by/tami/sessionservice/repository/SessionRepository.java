@@ -28,4 +28,25 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
             AND s.currentlyPeopleQuantity < s.allowedPeopleQuantity
             """)
     int tryReserveSpot(@Param("sessionId") Long sessionId);
+
+    // занять места: сработает, только если сеанс SCHEDULED и мест хватает
+    @Modifying(clearAutomatically = true)
+    @Query(value = """
+            UPDATE t_session
+            SET currently_people_quantity = currently_people_quantity + :count
+            WHERE id = :sessionId
+              AND status = 'SCHEDULED'
+              AND currently_people_quantity + :count <= allowed_people_quantity
+            """, nativeQuery = true)
+    int occupySeats(Long sessionId, int count);
+
+    // освободить места: не даём уйти в минус
+    @Modifying(clearAutomatically = true)
+    @Query(value = """
+            UPDATE t_session
+            SET currently_people_quantity = GREATEST(currently_people_quantity - :count, 0)
+            WHERE id = :sessionId
+            """, nativeQuery = true)
+    int freeSeats(Long sessionId, int count);
+
 }

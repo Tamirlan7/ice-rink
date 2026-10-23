@@ -14,7 +14,6 @@ import java.time.Instant;
 @Builder
 public class SessionSeat {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ticket_id")
     private Long ticketId;               // id приходит из ticket-service, не генерируется
 

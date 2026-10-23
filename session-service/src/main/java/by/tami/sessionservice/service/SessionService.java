@@ -19,7 +19,7 @@ public class SessionService {
     public Session getSessionById(Long id) {
         /* Long sessionId = 1; */
         return sessionRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Сессия с Id " + id +" не найдена"));
+                .orElseThrow(() -> new NotFoundException("Сессия с Id " + id + " не найдена"));
     }
 
     public GetSessionsResponse getSessionsByDate(LocalDate date) {
