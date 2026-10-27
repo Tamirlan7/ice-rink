@@ -7,7 +7,6 @@
       <module fileurl="file://$PROJECT_DIR$/session-service/session-service.iml" filepath="$PROJECT_DIR$/session-service/session-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/skate-service/skate-service.iml" filepath="$PROJECT_DIR$/skate-service/skate-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/ticket-service/ticket-service.iml" filepath="$PROJECT_DIR$/ticket-service/ticket-service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/user-service/user-service.iml" filepath="$PROJECT_DIR$/user-service/user-service.iml" />
     </modules>
   </component>
 </project>
