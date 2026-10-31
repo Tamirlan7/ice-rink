@@ -5,10 +5,7 @@ import by.tami.sessionservice.service.SessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
@@ -33,6 +30,11 @@ public class SessionController {
         LocalDate rangeTo = to == null ? LocalDate.now().plusDays(6) : to;
 
         return ResponseEntity.ok(sessionService.getSessionsByDateRange(rangeFrom, rangeTo));
+    }
+
+    @PostMapping("/cancel/{id}")
+    public ResponseEntity<?> cancelSession(@PathVariable("id") Long id) {
+        return ResponseEntity.noContent().build();
     }
 
 }
