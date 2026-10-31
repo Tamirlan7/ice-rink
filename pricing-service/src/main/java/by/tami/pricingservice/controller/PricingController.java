@@ -24,18 +24,6 @@ public class PricingController {
         return ResponseEntity.ok(pricingService.getPricingById(id));
     }
 
-
-    @GetMapping("/test")
-    public String testUser() {
-        return "Hello User!";
-    }
-
-    @GetMapping("/test/admin")
-    @RequiredRole({"ADMIN"})
-    public String test() {
-        return "Hello Admin!";
-    }
-
     @PostMapping
     @RequiredRole({"ADMIN"})
     public ResponseEntity<CreatePricingResponse> createPricing(
@@ -46,6 +34,7 @@ public class PricingController {
     }
 
     @PutMapping("/{id}")
+    @RequiredRole({"ADMIN"})
     public ResponseEntity<UpdatePricingResponse> updatePricing(
             @PathVariable Long id,
             @RequestBody UpdatePricingArgs args
@@ -56,6 +45,7 @@ public class PricingController {
     }
 
     @DeleteMapping("/{id}")
+    @RequiredRole({"ADMIN"})
     public ResponseEntity<?> deletePricing(@PathVariable Long id) {
         pricingService.deletePricing(id);
         return ResponseEntity.noContent().build();
