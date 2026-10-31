@@ -1,6 +1,6 @@
 package by.tami.ticketservice.config;
 
-import by.tami.ticketservice.job.TicketExpirationJob;
+import by.tami.ticketservice.scheduler.TicketExpirationJob;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

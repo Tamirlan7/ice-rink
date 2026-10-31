@@ -1,4 +1,4 @@
-package by.tami.ticketservice.job;
+package by.tami.ticketservice.scheduler;
 
 import by.tami.ticketservice.kafka.event.TicketExpiredEvent;
 import by.tami.ticketservice.model.Ticket;

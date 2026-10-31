@@ -19,6 +19,15 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
 
     List<Session> findByDateBetweenOrderByDateAscStartTimeAsc(LocalDate from, LocalDate to);
 
+    @Modifying
+    @Query("""
+        UPDATE Session s
+        SET s.status = SessionStatus.COMPLETED
+        WHERE s.status = SessionStatus.SCHEDULED
+        AND (s.date < :today OR (s.date = :today AND s.endTime < :nowTime))
+    """)
+    int completeExpiredSessions(LocalDate today, LocalTime nowTime);
+
     // атомарная резервация места — понадобится при покупке билета
     @Modifying
     @Query("""
