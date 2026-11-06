@@ -1,0 +1,22 @@
+meta {
+  name: delete pricing (admin role)
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{api_url}}/pricing/4
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearer_token}}
+}
+
+body:json {
+  {
+    "price": 800,
+    "category": "pensioner"
+  }
+}

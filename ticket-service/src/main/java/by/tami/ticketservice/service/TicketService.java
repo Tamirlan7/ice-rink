@@ -63,6 +63,12 @@ public class TicketService {
         }
     }
 
+    public TicketDto cancelTicket(Long ticketId, Long userId) {
+        Ticket ticket = ticketRepository.findByIdForUpdate(ticketId)
+                .orElseThrow(() -> new NotFoundException("Билет с таким id " + ticketId + " не существует"));
+
+    }
+
     public List<TicketDto> purchaseTickets(@Valid PurchaseTicketsRequest req) {
         /* fetch the session service */
         /* inside here it's already handling the exceptions, so don't worry */

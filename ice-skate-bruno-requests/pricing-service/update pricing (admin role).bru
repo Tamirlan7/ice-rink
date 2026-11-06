@@ -1,0 +1,22 @@
+meta {
+  name: update pricing (admin role)
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{api_url}}/pricing/4
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearer_token}}
+}
+
+body:json {
+  {
+    "price": 1000,
+    "category": "pensioner"
+  }
+}

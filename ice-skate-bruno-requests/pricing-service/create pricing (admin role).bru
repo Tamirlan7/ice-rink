@@ -1,0 +1,22 @@
+meta {
+  name: create pricing (admin role)
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{api_url}}/pricing
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearer_token}}
+}
+
+body:json {
+  {
+    "price": 800,
+    "category": "pensioner"
+  }
+}

@@ -1,0 +1,15 @@
+meta {
+  name: get pricings
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{api_url}}/pricing
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{bearer_token}}
+}
