@@ -5,15 +5,15 @@ meta {
 }
 
 get {
-  url: {{api_url}}/sessions?from=2026-10-31&to=2026-11-29
+  url: {{api_url}}/sessions?date=2026-11-03
   body: none
   auth: bearer
 }
 
 query {
-  from: 2026-10-31
-  to: 2026-11-29
-  ~date: 2026-10-10
+  date: 2026-11-03
+  ~to: 2026-11-29
+  ~from: 2026-10-31
 }
 
 auth:bearer {

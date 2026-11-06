@@ -9,10 +9,12 @@ import io.grpc.Status;
 import io.grpc.StatusException;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.grpc.server.service.GrpcService;
 
 @GrpcService
 @RequiredArgsConstructor
+@Slf4j
 public class SessionGrpcService extends SessionServiceGrpc.SessionServiceImplBase {
 
     private final SessionService sessionService;
@@ -44,6 +46,8 @@ public class SessionGrpcService extends SessionServiceGrpc.SessionServiceImplBas
         } catch (ConflictException e) {
             responseObserver.onError(Status.FAILED_PRECONDITION.withDescription(e.getMessage()).asRuntimeException());
         } catch (Exception e) {
+            log.error("reserveSeats failed: sessionId={}, ticketIds={}",
+                    request.getSessionId(), request.getTicketIdsList(), e);
             responseObserver.onError(Status.INTERNAL.withDescription("Internal error").asRuntimeException());
         }
     }
@@ -55,6 +59,7 @@ public class SessionGrpcService extends SessionServiceGrpc.SessionServiceImplBas
             responseObserver.onNext(ReleaseSeatsResponse.getDefaultInstance());
             responseObserver.onCompleted();
         } catch (Exception e) {
+            log.error("releaseSeats failed");
             responseObserver.onError(Status.INTERNAL.withDescription("Internal error").asRuntimeException());
         }
     }

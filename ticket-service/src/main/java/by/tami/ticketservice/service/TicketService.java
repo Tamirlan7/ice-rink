@@ -52,7 +52,7 @@ public class TicketService {
                 LocalTime.of(session.getStartTime().getHours(), session.getStartTime().getMinutes())
         );
 
-        if (start.isAfter(LocalDateTime.now())) {
+        if (start.isBefore(LocalDateTime.now(RINK_ZONE))) {
             throw new BadRequestException("Сеанс уже начался");
         }
 
